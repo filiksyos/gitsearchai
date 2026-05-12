@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AI GitHub Search",
-  description: "Search GitHub repositories using natural language.",
+  description: "Find codebases using natural language.",
 };
 
 export default function RootLayout({
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-transparent text-gray-900">
         <Navbar />
         {children}
+        <Analytics />
       </body>
     </html>
   );
