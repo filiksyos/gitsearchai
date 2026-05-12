@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AI GitHub Search",
-  description: "Search GitHub repositories using natural language.",
+  description: "Find codebases using natural language.",
 };
 
 export default function RootLayout({
