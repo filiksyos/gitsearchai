@@ -15,7 +15,7 @@ export default function Home() {
               AI GitHub Search
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Search GitHub repositories using natural language.
+              Find codebases using natural language.
             </p>
           </div>
           <div className="flex-1" />
