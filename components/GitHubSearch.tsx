@@ -75,6 +75,10 @@ export function GitHubSearch() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [activitySteps, setActivitySteps] = useState<ActivityStep[]>([]);
   const [reasoning, setReasoning] = useState<string | null>(null);
+  const [lastSearchKind, setLastSearchKind] = useState<SearchMode | null>(null);
+  const [activeSearchMode, setActiveSearchMode] = useState<SearchMode | null>(
+    null
+  );
   const modeMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -96,6 +100,7 @@ export function GitHubSearch() {
 
     setQuery(trimmed);
     setIsLoading(true);
+    setActiveSearchMode("normal");
     setErrorMessage(null);
     setStatusMessage(null);
     setActivitySteps([]);
@@ -119,11 +124,13 @@ export function GitHubSearch() {
       }
 
       setRepositories((data.repositories ?? []).slice(0, 9));
+      setLastSearchKind("normal");
     } catch {
       setErrorMessage("Network error. Please try again.");
       setRepositories([]);
     } finally {
       setIsLoading(false);
+      setActiveSearchMode(null);
     }
   }
 
@@ -133,6 +140,8 @@ export function GitHubSearch() {
 
     setQuery(trimmed);
     setIsLoading(true);
+    setActiveSearchMode("deep");
+    setSearchMode("deep");
     setErrorMessage(null);
     setStatusMessage("Starting deep research...");
     setActivitySteps([]);
@@ -217,6 +226,7 @@ export function GitHubSearch() {
           } else if (event.type === "result") {
             setRepositories(event.repositories.slice(0, 9));
             setReasoning(event.reasoning);
+            setLastSearchKind("deep");
             setStatusMessage(null);
             finished = true;
           } else if (event.type === "error") {
@@ -236,7 +246,13 @@ export function GitHubSearch() {
       setRepositories([]);
     } finally {
       setIsLoading(false);
+      setActiveSearchMode(null);
     }
+  }
+
+  function startDeepResearchFromResults() {
+    if (!query.trim() || isLoading) return;
+    void runDeepSearch(query);
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -357,14 +373,14 @@ export function GitHubSearch() {
         </div>
       )}
 
-      {isLoading && searchMode === "normal" && (
+      {isLoading && activeSearchMode === "normal" && (
         <div className="text-center py-12">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-400" />
           <p className="text-gray-600">Searching GitHub repositories...</p>
         </div>
       )}
 
-      {isLoading && searchMode === "deep" && (
+      {isLoading && activeSearchMode === "deep" && (
         <div className="rounded-lg border border-indigo-100 bg-indigo-50/50 px-5 py-6">
           <div className="flex items-center gap-3 mb-4">
             <Loader2 className="h-5 w-5 animate-spin text-indigo-600" />
@@ -409,7 +425,7 @@ export function GitHubSearch() {
 
       {repositories.length > 0 && (
         <div className="mt-10 space-y-4">
-          {reasoning && searchMode === "deep" && (
+          {reasoning && lastSearchKind === "deep" && (
             <div className="rounded-md border border-indigo-100 bg-indigo-50 px-4 py-3 text-sm text-indigo-900">
               <span className="font-medium">Deep research: </span>
               {reasoning}
@@ -423,6 +439,22 @@ export function GitHubSearch() {
               <RepositoryCard key={repo.id} repository={repo} />
             ))}
           </div>
+
+          {!isLoading &&
+          lastSearchKind === "normal" &&
+          repositories.length > 0 &&
+          query.trim() ? (
+            <p className="pt-8 text-center text-sm text-gray-600">
+              Want more depth?{" "}
+              <button
+                type="button"
+                onClick={startDeepResearchFromResults}
+                className="cursor-pointer font-medium text-gray-900 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-gray-950"
+              >
+                Deep Research
+              </button>
+            </p>
+          ) : null}
         </div>
       )}
     </div>
