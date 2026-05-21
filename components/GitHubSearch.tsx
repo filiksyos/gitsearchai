@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2, Search } from "lucide-react";
 
 import { RepositoryCard, type Repository } from "@/components/RepositoryCard";
+import { SampleQueryRotator } from "@/components/SampleQueryRotator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -21,11 +22,11 @@ export function GitHubSearch() {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const q = query.trim();
-    if (!q || isLoading) return;
+  async function runSearch(q: string) {
+    const trimmed = q.trim();
+    if (!trimmed || isLoading) return;
 
+    setQuery(trimmed);
     setIsLoading(true);
     setErrorMessage(null);
     setHasSearched(true);
@@ -35,7 +36,7 @@ export function GitHubSearch() {
       const response = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q }),
+        body: JSON.stringify({ query: trimmed }),
       });
 
       const data: SearchApiResponse = await response.json();
@@ -53,6 +54,11 @@ export function GitHubSearch() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    void runSearch(query);
   }
 
   return (
@@ -83,6 +89,10 @@ export function GitHubSearch() {
           </Button>
         </div>
       </form>
+
+      {!hasSearched && !isLoading && (
+        <SampleQueryRotator onSelect={runSearch} />
+      )}
 
       {errorMessage && (
         <div className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-red-800 text-sm">
