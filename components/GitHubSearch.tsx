@@ -47,7 +47,7 @@ export function GitHubSearch() {
         return;
       }
 
-      setRepositories(data.repositories ?? []);
+      setRepositories((data.repositories ?? []).slice(0, 9));
     } catch {
       setErrorMessage("Network error. Please try again.");
       setRepositories([]);
@@ -62,7 +62,7 @@ export function GitHubSearch() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto">
       <form onSubmit={handleSubmit} className="mb-8">
         <div className="flex gap-2">
           <div className="relative flex-1">
@@ -116,11 +116,11 @@ export function GitHubSearch() {
       )}
 
       {repositories.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Found {repositories.length} repositories
-          </h2>
-          <div className="grid gap-4">
+        <div className="mt-10 space-y-4">
+          <p className="text-sm text-gray-500">
+            Showing {repositories.length} results
+          </p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {repositories.map((repo) => (
               <RepositoryCard key={repo.id} repository={repo} />
             ))}

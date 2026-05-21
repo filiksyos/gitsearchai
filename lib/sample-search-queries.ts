@@ -1,3 +1,11 @@
+export const EXAMPLE_QUERY_CHIPS = [
+  "Quiz application",
+  "wishlist app",
+  "fitness mobile app",
+  "Analytics dashboard with ai",
+  "Meditation app in flutter",
+] as const;
+
 export const SAMPLE_SEARCH_QUERIES = [
   "platformer mario",
   "Voice AI agent for restaurant order taking",
