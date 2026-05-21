@@ -1,0 +1,30 @@
+export const EXAMPLE_QUERY_CHIPS = [
+  "Quiz application",
+  "wishlist app",
+  "fitness mobile app",
+  "Analytics dashboard with ai",
+  "Meditation app in flutter",
+] as const;
+
+export const SAMPLE_SEARCH_QUERIES = [
+  "platformer mario",
+  "Voice AI agent for restaurant order taking",
+  "wishlist app",
+  "football tactic board",
+  "An app that generates detailed study notes from a file",
+  "ecommerce website",
+  "Meditation app in flutter",
+  "Excel Analysis Tool powered by ai",
+  "Resume tailor made according to job description",
+  "Flutter game",
+  "A simple free online meeting app",
+  "fitness mobile app",
+  "a calendly clone",
+  "Analytics dashboard with ai",
+  "bucket list",
+  "Quiz application",
+  "remove background",
+  "an app to manage plant watering",
+  "A react mobile app for ordering food",
+  "Find me an edtech web app like brilliant, I want to tune it up to make a gamified math study portal",
+] as const;

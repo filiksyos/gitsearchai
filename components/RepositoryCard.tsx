@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, GitFork, Calendar } from "lucide-react";
+import { Star, GitFork } from "lucide-react";
 
 export interface Repository {
   id: number;
@@ -23,66 +23,44 @@ interface RepositoryCardProps {
 }
 
 export function RepositoryCard({ repository }: RepositoryCardProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center space-x-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={repository.owner.avatar_url}
-            alt={repository.owner.login}
-            className="w-8 h-8 rounded-full"
-          />
-          <div>
-            <h3 className="font-semibold text-lg text-gray-900">
-              <a
-                href={repository.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-blue-600 transition-colors"
-              >
-                {repository.name}
-              </a>
-            </h3>
-            <p className="text-sm text-gray-600">{repository.owner.login}</p>
-          </div>
+    <a
+      href={repository.html_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex h-full flex-col rounded-lg border border-gray-100 bg-white p-5 transition-all duration-200 hover:border-gray-200 hover:shadow-lg"
+    >
+      <div className="mb-3 flex items-center gap-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={repository.owner.avatar_url}
+          alt={repository.owner.login}
+          className="h-8 w-8 shrink-0 rounded-full"
+        />
+        <div className="min-w-0">
+          <h3 className="truncate text-[0.9375rem] font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
+            {repository.full_name}
+          </h3>
+          <p className="text-[0.8125rem] text-gray-500">{repository.owner.login}</p>
         </div>
       </div>
 
       {repository.description && (
-        <p className="text-gray-700 mb-4 line-clamp-2">{repository.description}</p>
+        <p className="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-600">
+          {repository.description}
+        </p>
       )}
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4 text-sm text-gray-600">
-          <div className="flex items-center space-x-1">
-            <Star className="w-4 h-4" />
-            <span>{repository.stargazers_count.toLocaleString()}</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <GitFork className="w-4 h-4" />
-            <span>{repository.forks_count.toLocaleString()}</span>
-          </div>
-          {repository.language && (
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span>{repository.language}</span>
-            </div>
-          )}
+      <div className="mt-auto flex items-center gap-3 text-[0.8125rem] text-gray-500">
+        <div className="flex items-center gap-1">
+          <Star className="h-3.5 w-3.5" />
+          <span>{repository.stargazers_count.toLocaleString()}</span>
         </div>
-        <div className="flex items-center space-x-1 text-sm text-gray-500">
-          <Calendar className="w-4 h-4" />
-          <span>{formatDate(repository.updated_at)}</span>
+        <div className="flex items-center gap-1">
+          <GitFork className="h-3.5 w-3.5" />
+          <span>{repository.forks_count.toLocaleString()}</span>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
